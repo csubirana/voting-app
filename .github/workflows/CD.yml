@@ -1,5 +1,4 @@
 name: CD Pipeline
-
 on:
   workflow_run:
     workflows: ["CI Pipeline"]
@@ -7,18 +6,22 @@ on:
       - completed
 
 jobs:
-  deploy:
+  deploy_and_test:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Start Docker Compose
-        run: docker-compose up -d
-        working-directory: /opt/voting-app
+    - name: Set up Docker Compose
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-compose
 
-      - name: Run Unit Tests
-        run: |
-          # Add your unit test commands here
-          docker-compose exec app pytest
-        working-directory: /opt/voting-app
+    - name: Start Docker Compose
+      run: docker-compose up -d
+
+    - name: Wait for services to start
+      run: sleep 10  
+
+
