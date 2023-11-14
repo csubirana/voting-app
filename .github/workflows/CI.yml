@@ -24,10 +24,10 @@ jobs:
           pip install -r requirements.txt
 
       - name: Lint Python code
-        run: flake8 azure-vote/main.py
+        run: flake8 voting-app/azure-vote/main.py
 
       - name: Security check
-        run: bandit -r azure-vote/main.py
+        run: bandit -r voting-app/azure-vote/main.py
 
   build_and_push_docker:
     needs: lint_and_security
