@@ -10,7 +10,7 @@ packer {
 
 source "docker" "ubuntu" {
   image        = "ubuntu:latest"
-  export_path  = "Packer/ubuntu-exported-image.tar"
+  export_path  = "ubuntu-exported-image.tar"
   force        = true
 }
 
