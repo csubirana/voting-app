@@ -1,0 +1,26 @@
+name: CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker
+        uses: actions/setup-docker@v2
+
+      - name: Start Docker containers
+        run: docker-compose up -d
+
+      - name: Run unit tests
+        run: docker-compose exec app python manage.py test
+
+      - name: Stop Docker containers
+        run: docker-compose down
