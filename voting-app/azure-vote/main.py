@@ -5,18 +5,17 @@ import socket
 import unittest
 import requests
 
+
 class TestVote(unittest.TestCase):
     def get_vote(self):
         expected = 200
-        response = requests.get(
-            'http://localhost:8080', timeout=5)
+        response = requests.get('http://localhost:8080')
         actual = response.status_code
         self.assertEqual(actual, expected)
 
     def add_vote(self):
         expected = 200
-        response = requests.post(
-            'http://localhost:8080', {'vote': 'Cats'}, timeout=5)
+        response = requests.post('http://localhost:8080', {'vote': 'Cats'})
         actual = response.status_code
         self.assertEqual(actual, expected)
 
@@ -47,8 +46,9 @@ redis_server = os.environ['REDIS']
 # Redis Connection
 try:
     if "REDIS_PWD" in os.environ:
-        r = redis.StrictRedis(
-            host=redis_server, port=6379, password=os.environ['REDIS_PWD'])
+        r = redis.StrictRedis(host=redis_server,
+                              port=6379,
+                              password=os.environ['REDIS_PWD'])
     else:
         r = redis.Redis(redis_server)
     r.ping()
@@ -104,7 +104,7 @@ def index():
             # Insert vote result into DB
             vote = request.form['vote']
             r.incr(vote, 1)
-            
+
             # Get current values
             vote1 = r.get(button1).decode('utf-8')
             vote2 = r.get(button2).decode('utf-8')
@@ -116,5 +116,7 @@ def index():
                                    button1=button1,
                                    button2=button2,
                                    title=title)
+
+
 if __name__ == "__main__":
-    app.run(host='127.0.0.1')
+    app.run()
