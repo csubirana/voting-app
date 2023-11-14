@@ -19,3 +19,4 @@ build {
   provisioner "ansible" {
     playbook_file = "inventory.yml"
   }
+}
