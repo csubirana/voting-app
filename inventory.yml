@@ -1,34 +1,30 @@
-- name: Deploy Voting App
-  hosts: all
-  become: yes
-
+- hosts: all
+  become: true
   tasks:
-    - name: Update apt cache
-      apt:
-        update_cache: yes
-
-    - name: Install Python
+    - name: Bootstrap Python
       raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
-
-    - name: Install dependencies
-      apt:
-        name: "{{ inventory }}"
-        state: present
-      loop:
-        - docker.io
-        - docker-compose
-        - git
-
-    - name: Clone voting-app repository
+    
+    - name: Clone Voting App Repository
       git:
         repo: https://github.com/csubirana/voting-app.git
         dest: /opt/voting-app
-        version: master
 
-    - name: Change directory to voting-app
-      become: yes
-      command: cd /opt/voting-app
+    - name: Install Dependencies
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - python-pip
+        - docker.io
+        - docker-compose
+        # Add other dependencies as needed
 
-    - name: Build and run the Docker containers
+    - name: Install Python Dependencies
+      pip:
+        requirements: /opt/voting-app/requirements.txt
+      become_user: your-app-user
+
+    - name: Build and Start Docker Containers
       command: docker-compose up -d
-
+      args:
+        chdir: /opt/voting-app
