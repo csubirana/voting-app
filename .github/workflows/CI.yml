@@ -40,14 +40,8 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Set up Packer
-        run: |
-          curl -fsSL https://releases.hashicorp.com/packer/1.7.5/packer_1.7.5_linux_amd64.zip -o packer.zip
-          unzip packer.zip
-          sudo mv packer /usr/local/bin/
-
       - name: Build Packer Image
-        run: packer build -var-file=variables.json packer-template.json
+        run: packer build -var-file=variables.json packer.pkr.hcl
 
   push-docker-hub:
     runs-on: ubuntu-latest
