@@ -1,4 +1,5 @@
 packer {
+
   required_plugins {
     docker = {
       version = ">= 1.0.0"
@@ -16,6 +17,6 @@ source "docker" "ubuntu" {
 build {
   sources = ["source.docker.ubuntu"]
   provisioner "ansible" {
-    playbook_file = "deploy.yml"
+    playbook_file = "inventory.yml"
   }
 }
